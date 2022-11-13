@@ -2,5 +2,8 @@ using TrixiTestCI
 using Test
 
 @testset "TrixiTestCI.jl" begin
-    # Write your tests here.
+    @testset "foo -> bar" begin
+      f = foo(3)
+      @test bar(f) ≈ 2*f
+    end
 end
