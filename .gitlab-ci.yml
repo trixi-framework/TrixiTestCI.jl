@@ -1,0 +1,11 @@
+.script:
+  script:
+    - |
+      julia --project=@. -e '
+        using Pkg
+        Pkg.build()
+        Pkg.test()'
+Julia 1.8:
+  image: julia:1.8
+  extends:
+    - .script
