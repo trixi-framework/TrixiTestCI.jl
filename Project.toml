@@ -3,5 +3,8 @@ uuid = "aed42ca5-7221-43db-b3a6-a4873943559a"
 authors = ["Michael Schlottke-Lakemper <michael@sloede.com>"]
 version = "0.1.0"
 
+[deps]
+StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
+
 [compat]
 julia = "1.8"
