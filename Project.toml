@@ -1,0 +1,7 @@
+name = "TrixiTestCI"
+uuid = "aed42ca5-7221-43db-b3a6-a4873943559a"
+authors = ["Michael Schlottke-Lakemper <michael@sloede.com>"]
+version = "0.1.0"
+
+[compat]
+julia = "1.8"
