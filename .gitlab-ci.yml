@@ -6,12 +6,12 @@ stages:          # List of stages for jobs, and their order of execution
 default:
   tags: ["hpc"]
   before_script:
-    - source Juliainstall.sh
+    - ml Julia
 
 .test-job:
     stage: test
     before_script:
-        - source Juliainstall.sh
+        - ml Julia
         - mkdir run
         - cd run
         - $JULIA_EXEC --project="." -e 'using Pkg; Pkg.add(["OrdinaryDiffEq", "KernelAbstractions"]); Pkg.develop(PackageSpec(path=".."));'
