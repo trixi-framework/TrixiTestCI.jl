@@ -5,6 +5,22 @@ stages:          # List of stages for jobs, and their order of execution
   
 default:
   tags: ["hpc"]
+  before_script:
+    - source Juliainstall.sh
+
+.test-job:
+    stage: test
+    before_script:
+        - source Juliainstall.sh
+        - mkdir run
+        - cd run
+        - $JULIA_EXEC --project="." -e 'using Pkg; Pkg.add(["OrdinaryDiffEq", "KernelAbstractions"]); Pkg.develop(PackageSpec(path=".."));'
+
+cpu-test-job:
+    extends: .test-job
+    script:
+        - $JULIA_EXEC --project="." --threads=24 -e 'using Trixi; trixi_include(pkgdir(Trixi, "test", "test_tree_2d_advection.jl"))'
+        - $JULIA_EXEC --project="." --threads=24 -e 'using Trixi; trixi_include(pkgdir(Trixi, "test", "test_p4est_2d.jl"))'
 
 build-job:       # This job runs in the build stage, which runs first.
   stage: build
