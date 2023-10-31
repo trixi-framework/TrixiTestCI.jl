@@ -3,26 +3,36 @@ stages:          # List of stages for jobs, and their order of execution
   - test
   - deploy
   
-default:
+.julia-rwth-hpc:
   tags: ["hpc"]
   before_script:
     - ml Julia
+  id_tokens:
+  HPC_CI_TOKEN:
+    aud: aixCIlenz
+  variables:
+    SLURM_PARAM_CORES: "-c 24"
+
 
 .test-job:
+    extends: .julia-rwth-hpc
     stage: test
     before_script:
         - ml Julia
         - mkdir run
         - cd run
-        - $JULIA_EXEC --project="." -e 'using Pkg; Pkg.add(["OrdinaryDiffEq", "KernelAbstractions"]); Pkg.develop(PackageSpec(path=".."));'
+        - julia --project="." -e 'using Pkg; Pkg.add(["OrdinaryDiffEq", "KernelAbstractions"]); Pkg.develop(PackageSpec(path=".."));'
 
 cpu-test-job:
-    extends: .test-job
-    script:
-        - $JULIA_EXEC --project="." --threads=24 -e 'using Trixi; trixi_include(pkgdir(Trixi, "test", "test_tree_2d_advection.jl"))'
-        - $JULIA_EXEC --project="." --threads=24 -e 'using Trixi; trixi_include(pkgdir(Trixi, "test", "test_p4est_2d.jl"))'
+  extends: .test-job
+  variables:
+    SLURM_PARAM_CORES: "-c 24"
+  script:
+    - julia --project="." --threads=24 -e 'using Trixi; trixi_include(pkgdir(Trixi, "test", "test_tree_2d_advection.jl"))'
+    - julia --project="." --threads=24 -e 'using Trixi; trixi_include(pkgdir(Trixi, "test", "test_p4est_2d.jl"))'
 
-build-job:       # This job runs in the build stage, which runs first.
+build-job:       # This job runs in the build stage, which runs first.  
+  extends: .julia-rwth-hpc
   stage: build
   script:
     - echo "Compiling the code..."
