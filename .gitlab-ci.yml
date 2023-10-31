@@ -8,8 +8,8 @@ stages:          # List of stages for jobs, and their order of execution
   before_script:
     - ml Julia
   id_tokens:
-  HPC_CI_TOKEN:
-    aud: aixCIlenz
+    HPC_CI_TOKEN:
+      aud: aixCIlenz
   variables:
     SLURM_PARAM_CORES: "-c 24"
 
