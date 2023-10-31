@@ -2,9 +2,11 @@ stages:          # List of stages for jobs, and their order of execution
   - build
   - test
   - deploy
-  
-.julia-rwth-hpc:
+
+default:
   tags: ["hpc"]
+
+.julia-rwth-hpc:
   before_script:
     - ml Julia
   id_tokens:
